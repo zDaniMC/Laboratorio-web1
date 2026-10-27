@@ -10,6 +10,8 @@ import { ClientCreateReservationPage } from './pages/client-create-reservation/c
 import { AgentEventsPage } from './pages/agent-events/agent-events.page';
 import { AgentReservationsPage } from './pages/agent-reservations/agent-reservations.page';
 import { AgentCreateEventPage } from './pages/agent-create-event/agent-create-event.page';
+import { ClientCatalogPage } from './pages/client-catalog/client-catalog.page';
+import { AgentReportPage } from './pages/agent-report/agent-report.page';
 
 export const routes: Routes = [
     {
@@ -37,6 +39,10 @@ export const routes: Routes = [
                 component: ClientCreateReservationPage
             },
             {
+                path: "catalog",
+                component: ClientCatalogPage
+            },
+            {
                 path: "",
                 redirectTo: "events",
                 pathMatch: "full"
@@ -58,6 +64,10 @@ export const routes: Routes = [
             {
                 path: "create-event",
                 component: AgentCreateEventPage
+            },
+            {
+                path: "report",
+                component: AgentReportPage
             },
             {
                 path: "",

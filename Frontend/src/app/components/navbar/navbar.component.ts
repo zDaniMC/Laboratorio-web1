@@ -20,11 +20,13 @@ export class NavbarComponent {
   clientConfig: NavbarConfig[] = [
     { url: '/client/events', label: 'Eventos', icon: 'calendar3' },
     { url: '/client/reservations', label: 'Reservaciones', icon: 'calendar3' },
+    { url: '/client/catalog', label: 'Cartelera', icon: 'grid' },
   ]
 
   agentConfig: NavbarConfig[] = [
     { url: '/agent/events', label: 'Eventos', icon: 'calendar3' },
     { url: '/agent/create-event', label: 'Crear Evento', icon: 'calendar3' },
+    { url: '/agent/report', label: 'Reporte', icon: 'bar-chart' },
   ]
 
   private router = inject(Router);
