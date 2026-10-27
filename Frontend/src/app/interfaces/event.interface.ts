@@ -12,6 +12,27 @@ export interface Event {
     estado: EventState;
 }
 
+export interface EventAvailability extends Omit<Event, 'fecha_inicio' | 'fecha_fin' | 'observaciones'> {
+    fecha_inicio: string;
+    fecha_fin: string;
+    observaciones: string | null;
+    entradas_vendidas: number;
+    entradas_disponibles: number;
+}
+
+export interface EventFilters {
+    ciudad?: string;
+    estado?: EventState;
+}
+
+export const EVENT_STATES: EventState[] = [
+    'Programado',
+    'En Boleteria',
+    'En Vivo',
+    'Finalizado',
+    'Cancelado',
+];
+
 export type EventState = 
     | 'Programado'
     | 'En Boleteria'

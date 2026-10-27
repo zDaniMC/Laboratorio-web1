@@ -1,0 +1,117 @@
+<section class="catalog container">
+  <div class="catalog__header">
+    <div>
+      <h2 class="catalog__title">Cartelera de eventos</h2>
+      <p class="text-secondary mb-0">
+        Consulta los eventos disponibles y su ocupación en tiempo real.
+      </p>
+    </div>
+
+    <span class="catalog__count">{{ events().length }} eventos</span>
+  </div>
+
+  <div class="catalog__filters">
+    <div>
+      <label for="filter-city" class="form-label">Ciudad</label>
+      <select
+        id="filter-city"
+        class="form-select"
+        (change)="onCityChange($any($event.target).value)"
+      >
+        <option value="">Todas las ciudades</option>
+        @for (city of cities(); track city) {
+          <option [value]="city">{{ city }}</option>
+        }
+      </select>
+    </div>
+
+    <div>
+      <label for="filter-state" class="form-label">Estado</label>
+      <select
+        id="filter-state"
+        class="form-select"
+        (change)="onStateChange($any($event.target).value)"
+      >
+        <option value="">Todos los estados</option>
+        @for (state of states; track state) {
+          <option [value]="state">{{ state }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="catalog__message">
+      <div class="spinner-border text-primary" role="status"></div>
+      <span>Cargando eventos...</span>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="alert alert-danger d-flex align-items-center gap-2" role="alert">
+      <i class="bi bi-exclamation-triangle"></i>
+      {{ errorMessage() }}
+    </div>
+  } @else if (events().length === 0) {
+    <div class="catalog__message">
+      <i class="bi bi-calendar-x"></i>
+      <span>No hay eventos que coincidan con los filtros.</span>
+    </div>
+  } @else {
+    <div class="row g-4">
+      @for (event of events(); track event.codigo) {
+        <div class="col-12 col-md-6 col-xl-4">
+          <article class="catalog-card card h-100">
+            <div class="catalog-card__top">
+              <span class="catalog-card__status catalog-card__status--{{ stateClass(event.estado) }}">
+                {{ event.estado }}
+              </span>
+              <small>#EVT-{{ event.codigo }}</small>
+            </div>
+
+            <div class="card-body catalog-card__body">
+              <h3 class="catalog-card__title">{{ event.nombre }}</h3>
+              <p class="catalog-card__description">{{ event.descripcion }}</p>
+
+              <ul class="catalog-card__info">
+                <li>
+                  <i class="bi bi-geo-alt"></i>
+                  {{ event.teatro }} · {{ event.ciudad }}
+                </li>
+                <li>
+                  <i class="bi bi-calendar-event"></i>
+                  {{ event.fecha_inicio | date: "d 'de' MMMM 'de' y, h:mm a" }}
+                </li>
+                <li>
+                  <i class="bi bi-ticket-perforated"></i>
+                  {{ event.precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }} por entrada
+                </li>
+              </ul>
+
+              <div class="catalog-card__occupancy">
+                <div class="d-flex justify-content-between">
+                  <span>Ocupación</span>
+                  <strong>{{ occupancy(event) }}%</strong>
+                </div>
+
+                <div
+                  class="progress"
+                  role="progressbar"
+                  [attr.aria-valuenow]="occupancy(event)"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                >
+                  <div class="progress-bar" [style.width.%]="occupancy(event)"></div>
+                </div>
+
+                <small>
+                  {{ event.entradas_vendidas | number }} vendidas ·
+                  {{ event.entradas_disponibles | number }} disponibles de
+                  {{ event.capacidad | number }}
+                </small>
+              </div>
+            </div>
+          </article>
+        </div>
+      }
+    </div>
+  }
+</section>
