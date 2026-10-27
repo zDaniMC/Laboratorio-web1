@@ -1,5 +1,7 @@
 import { Router } from "express";
+import { EventsRoutes } from "./modules/events/events.routes";
 import { ExampleRoutes } from "./modules/example/example.routes";
+import { ReservationsRoutes } from "./modules/reservations/reservations.routes";
 
 export class AppRoutes {
 
@@ -9,6 +11,8 @@ export class AppRoutes {
 
     // Definir rutas
     apiRouter.use("/example", ExampleRoutes.routes);
+    apiRouter.use("/events", EventsRoutes.routes);
+    apiRouter.use("/reservations", ReservationsRoutes.routes);
 
     router.use("/api", apiRouter);
 
