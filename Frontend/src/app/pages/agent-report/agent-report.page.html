@@ -1,0 +1,182 @@
+<section class="report">
+  <div class="report__header">
+    <span class="report__eyebrow">GESTIÓN DE EVENTOS</span>
+    <h2>Reporte de reservas</h2>
+    <p>Resumen de ventas y reservas registradas en todos los eventos.</p>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger d-flex align-items-center gap-2" role="alert">
+      <i class="bi bi-exclamation-triangle"></i>
+      {{ errorMessage() }}
+    </div>
+  }
+
+  @if (loadingSummary()) {
+    <div class="report__message">
+      <div class="spinner-border text-primary" role="status"></div>
+      <span>Cargando resumen...</span>
+    </div>
+  }
+
+  @if (summary(); as report) {
+    <div class="report-kpis">
+      <div class="report-kpi">
+        <div class="report-kpi__icon report-kpi__icon--blue"><i class="bi bi-receipt"></i></div>
+        <div>
+          <span>Total de reservas</span>
+          <strong>{{ report.total_reservas }}</strong>
+        </div>
+      </div>
+
+      <div class="report-kpi">
+        <div class="report-kpi__icon report-kpi__icon--green"><i class="bi bi-ticket-perforated"></i></div>
+        <div>
+          <span>Entradas vendidas</span>
+          <strong>{{ report.total_entradas | number }}</strong>
+        </div>
+      </div>
+
+      <div class="report-kpi">
+        <div class="report-kpi__icon report-kpi__icon--purple"><i class="bi bi-currency-dollar"></i></div>
+        <div>
+          <span>Valor recaudado</span>
+          <strong>{{ report.valor_total | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="report-grid">
+      <div class="report-panel">
+        <h3>Valor recaudado por evento</h3>
+        <p class="report-panel__hint">No incluye reservas canceladas.</p>
+
+        <div class="bar-chart">
+          @for (item of report.por_evento; track item.evento_codigo) {
+            <div class="bar-chart__row">
+              <span class="bar-chart__label" [title]="item.evento_nombre">{{ item.evento_nombre }}</span>
+              <div class="bar-chart__track">
+                <div class="bar-chart__bar" [style.width.%]="barWidth(item.total)"></div>
+              </div>
+              <span class="bar-chart__value">
+                {{ item.total | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+                <small>{{ item.entradas }} entradas</small>
+              </span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="report-panel">
+        <h3>Reservas por estado</h3>
+        <p class="report-panel__hint">Sobre {{ report.total_reservas }} reservas.</p>
+
+        <div class="state-stack">
+          @for (state of states; track state) {
+            <div
+              class="state-stack__segment state-stack__segment--{{ stateClass(state) }}"
+              [style.width.%]="statePercent(state)"
+              [title]="state"
+            ></div>
+          }
+        </div>
+
+        <ul class="state-legend">
+          @for (state of states; track state) {
+            <li>
+              <span class="state-legend__dot state-legend__dot--{{ stateClass(state) }}"></span>
+              <span>{{ state }}</span>
+              <strong>{{ report.por_estado[state] }}</strong>
+              <small>{{ statePercent(state) | number: '1.0-0' }}%</small>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  }
+
+  <div class="report-panel report-panel--table">
+    <div class="report-table__header">
+      <div>
+        <h3>Reservas registradas</h3>
+        <p class="report-panel__hint">{{ reservations().length }} reservas</p>
+      </div>
+
+      <div class="state-filter" role="group" aria-label="Filtrar por estado">
+        <button
+          type="button"
+          class="state-filter__button"
+          [class.active]="selectedState() === null"
+          (click)="filterByState(null)"
+        >
+          Todas
+        </button>
+        @for (state of states; track state) {
+          <button
+            type="button"
+            class="state-filter__button"
+            [class.active]="selectedState() === state"
+            (click)="filterByState(state)"
+          >
+            {{ state }}
+          </button>
+        }
+      </div>
+    </div>
+
+    @if (loadingTable()) {
+      <div class="report__message">
+        <div class="spinner-border text-primary" role="status"></div>
+        <span>Cargando reservas...</span>
+      </div>
+    } @else {
+      <div class="table-responsive">
+        <table class="table report-table align-middle mb-0">
+          <thead>
+            <tr>
+              <th scope="col">Código</th>
+              <th scope="col">Cliente</th>
+              <th scope="col">Evento</th>
+              <th scope="col">Fecha de reserva</th>
+              <th scope="col">Entradas</th>
+              <th scope="col">Total</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Observaciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (reservation of reservations(); track reservation.codigo) {
+              <tr>
+                <td><span class="report-table__code">#RES-{{ reservation.codigo }}</span></td>
+                <td>{{ reservation.cliente }}</td>
+                <td>
+                  <div class="report-table__event">
+                    <span>{{ reservation.evento_nombre }}</span>
+                    <small>{{ reservation.ciudad }}</small>
+                  </div>
+                </td>
+                <td>{{ reservation.fecha | date: 'dd/MM/yyyy h:mm a' }}</td>
+                <td>{{ reservation.entradas }}</td>
+                <td class="report-table__total">
+                  {{ reservation.total | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+                </td>
+                <td>
+                  <span class="status-badge status-badge--{{ stateClass(reservation.estado) }}">
+                    {{ reservation.estado }}
+                  </span>
+                </td>
+                <td>{{ reservation.observaciones ?? 'Sin observaciones' }}</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="8" class="text-center text-secondary py-4">
+                  No hay reservas con este estado.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</section>

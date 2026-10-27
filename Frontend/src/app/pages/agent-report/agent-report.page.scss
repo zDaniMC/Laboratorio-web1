@@ -1,0 +1,303 @@
+$blue: #0d6efd;
+$green: #198754;
+$amber: #d98200;
+$red: #dc3545;
+$purple: #7952b3;
+
+.report {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  &__header {
+    h2 {
+      margin: 0.3rem 0;
+      color: #212529;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    p {
+      margin: 0;
+      color: #7b8492;
+    }
+  }
+
+  &__eyebrow {
+    color: $blue;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  &__message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 2rem 1rem;
+    color: #7b8492;
+  }
+}
+
+.report-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.report-kpi {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid #e9edf3;
+  border-radius: 1rem;
+  background-color: #fff;
+  box-shadow: 0 4px 20px rgb(33 37 41 / 4%);
+
+  span {
+    display: block;
+    color: #7b8492;
+    font-size: 0.8rem;
+  }
+
+  strong {
+    color: #212529;
+    font-size: 1.4rem;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 0.8rem;
+    font-size: 1.3rem;
+
+    &--blue   { background-color: #eff5ff; color: $blue; }
+    &--green  { background-color: #e8f7ee; color: $green; }
+    &--purple { background-color: #f3edff; color: $purple; }
+  }
+}
+
+.report-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.report-panel {
+  padding: 1.5rem;
+  border: 1px solid #e9edf3;
+  border-radius: 1rem;
+  background-color: #fff;
+  box-shadow: 0 4px 20px rgb(33 37 41 / 4%);
+
+  h3 {
+    margin: 0 0 0.25rem;
+    color: #212529;
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+
+  &__hint {
+    margin: 0 0 1.25rem;
+    color: #929baa;
+    font-size: 0.8rem;
+  }
+
+  &--table {
+    padding: 0;
+
+    .report-panel__hint {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.bar-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+
+  &__row {
+    display: grid;
+    grid-template-columns: minmax(120px, 200px) 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__label {
+    overflow: hidden;
+    color: #596273;
+    font-size: 0.82rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__track {
+    height: 0.75rem;
+    overflow: hidden;
+    border-radius: 1rem;
+    background-color: #f0f2f6;
+  }
+
+  &__bar {
+    height: 100%;
+    border-radius: 1rem;
+    background: linear-gradient(90deg, #6ea8fe, $blue);
+    transition: width 0.4s ease;
+  }
+
+  &__value {
+    min-width: 110px;
+    color: #212529;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-align: right;
+
+    small {
+      display: block;
+      color: #929baa;
+      font-weight: 400;
+    }
+  }
+}
+
+.state-stack {
+  display: flex;
+  height: 1rem;
+  overflow: hidden;
+  border-radius: 1rem;
+  background-color: #f0f2f6;
+
+  &__segment {
+    &--reserved  { background-color: $amber; }
+    &--confirmed { background-color: $green; }
+    &--cancelled { background-color: $red; }
+  }
+}
+
+.state-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: grid;
+    grid-template-columns: auto 1fr auto 3rem;
+    align-items: center;
+    gap: 0.6rem;
+    color: #596273;
+    font-size: 0.85rem;
+  }
+
+  small {
+    color: #929baa;
+    text-align: right;
+  }
+
+  &__dot {
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+
+    &--reserved  { background-color: $amber; }
+    &--confirmed { background-color: $green; }
+    &--cancelled { background-color: $red; }
+  }
+}
+
+.report-table__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.state-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+
+  &__button {
+    padding: 0.35rem 0.85rem;
+    border: 1px solid #dfe3ea;
+    border-radius: 2rem;
+    background-color: #fff;
+    color: #596273;
+    font-size: 0.8rem;
+    font-weight: 600;
+
+    &.active {
+      border-color: $blue;
+      background-color: $blue;
+      color: #fff;
+    }
+  }
+}
+
+.report-table {
+  min-width: 960px;
+
+  thead th {
+    padding: 1rem 1.1rem;
+    border-bottom: 1px solid #e9edf3;
+    background-color: #f8f9fc;
+    color: #737d8c;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 0.9rem 1.1rem;
+    border-bottom: 1px solid #f0f2f6;
+    color: #596273;
+    font-size: 0.82rem;
+  }
+
+  &__code {
+    color: $blue;
+    font-weight: 700;
+  }
+
+  &__event {
+    display: flex;
+    flex-direction: column;
+
+    small {
+      color: #929baa;
+    }
+  }
+
+  &__total {
+    color: #212529;
+    font-weight: 700;
+  }
+}
+
+.status-badge {
+  padding: 0.3rem 0.7rem;
+  border-radius: 2rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+
+  &--reserved  { background-color: #fff4e5; color: #b86e00; }
+  &--confirmed { background-color: #e8f7ee; color: $green; }
+  &--cancelled { background-color: #fdecee; color: $red; }
+}
